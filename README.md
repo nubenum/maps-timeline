@@ -1,6 +1,6 @@
 The Google Maps Timeline (https://www.google.de/maps/timeline) allows you, if enabled, to view the places you visited and the paths you took. This script will convert the Timeline data to SVG or GeoJSON to view all your movements on one map.
 
-View a live demo at https://projekt.nubenum.com/maps-timeline/
+View a live demo at https://projekt.nubenum.com/18/4/maps-timeline/
 
 To obtain your own data, use Google Takeout (http://takeout.google.com) to download your "Location History" in JSON format. This script will accept the downloaded and extracted JSON file as input.
 
