@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import json
 from datetime import datetime
 import argparse
@@ -224,24 +226,31 @@ def analyze(googjson_locations, scale):
 
 
 if __name__ == '__main__':
-    p = argparse.ArgumentParser(description="Converts Google Maps Timeline data to GeoJSON or SVG so that you can view your entire timeline on one map.")
-    p.add_argument('input', help='The input JSON timeline file obtained from Google Takeout')
-    p.add_argument('output', help='The output file to write the result to')
-    p.add_argument('--geojson', action='store_true', help='Output GeoJSON for use with mapping applications. The default ist SVG for direct viewing.')
-    p.add_argument('-w', '--stroke-width', type=float, default=0.5, help='The width of the lines. Applies only to SVG output. Useful if you want to generate different zoom levels.')
-    p.add_argument('-s', '--scale', type=float, default=500.0, help='The scale of the canvas. Applies only to SVG output.')
+    p = argparse.ArgumentParser(description="Converts Google Maps Timeline data to GeoJSON or SVG so that you can view your entire timeline on one map.",
+    epilog="Example: python3 convertmapstimeline.py 'Location History.json' timeline.svg")
+    p.add_argument('input_file', help='The input JSON timeline file obtained from Google Takeout')
+    p.add_argument('output_file', help='The output file to write the result to')
+    p.add_argument('--geojson', action='store_true', help='Output GeoJSON for use with mapping applications. The default is SVG for direct viewing in a browser.')
+    p.add_argument('-w', '--stroke-width', type=float, default=0.5, help='The width of the lines. Applies only to SVG output. Useful if you want to generate different zoom levels. (default: 0.5)')
+    p.add_argument('-s', '--scale', type=float, default=100.0, help='The scale of the canvas. Applies only to SVG output. Increase to be able to zoom in more closely. (default: 100)')
     p.add_argument('-c', '--canvas', help='lat,lon,height,width Set the SVG viewBox to the area around the given center (lat,lon) with the given height and width (in float degrees). If not given, everything will be on the canvas. E.g. 48.86,2.34,0.05,0.06 for the city of Paris.')
 
     args = p.parse_args()
-    data = read_googjson(args.input)
+
+    print('Reading input file...')
+    data = read_googjson(args.input_file)
+
+    print('Analyzing data...')
     paths, canvas = analyze(data, args.scale)
     if args.canvas:
         d = args.canvas.split(',')
         canvas.set_center_dimensions(float(d[0]), float(d[1]), float(d[2]), float(d[3]))
+
+    print('Rendering output file...')
     if args.geojson:
         write_geojson(args.output, paths)
     else:
-        write_svg(args.output, paths, canvas, args.stroke_width, args.scale)
+        write_svg(args.output_file, paths, canvas, args.stroke_width, args.scale)
 
 #opacity age
 #dotted speed
