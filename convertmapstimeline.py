@@ -248,7 +248,7 @@ if __name__ == '__main__':
 
     print('Rendering output file...')
     if args.geojson:
-        write_geojson(args.output, paths)
+        write_geojson(args.output_file, paths)
     else:
         write_svg(args.output_file, paths, canvas, args.stroke_width, args.scale)
 
